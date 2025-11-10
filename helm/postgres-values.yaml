@@ -3,5 +3,7 @@ auth:
   password: "harman_pass"
   database: "harman_db"
 
-persistence:
-  enabled: false # 로컬 테스트 편의를 위해 영구 볼륨 비활성화
+# "Permission denied" 오류 해결을 위해
+# 데이터 볼륨의 권한을 자동으로 설정하는 initContainer를 활성화합니다.
+volumePermissions:
+  enabled: true
