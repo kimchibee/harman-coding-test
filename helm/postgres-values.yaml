@@ -1,0 +1,7 @@
+auth:
+  username: "harman_user"
+  password: "harman_pass"
+  database: "harman_db"
+
+persistence:
+  enabled: false # 로컬 테스트 편의를 위해 영구 볼륨 비활성화
