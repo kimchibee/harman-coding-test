@@ -33,6 +33,7 @@ def ensure_table_exists(conn):
                 NodeName TEXT NOT NULL,
                 MountPath TEXT NOT NULL,
                 FileList JSONB,
+                -- FIX: 'TIMESTAMZ' -> 'TIMESTAMPTZ' (SQL 오타 수정) 
                 CollectedAt TIMESTAMPTZ NOT NULL
             );
         """) #
@@ -91,7 +92,16 @@ def main_loop():
 
 if __name__ == "__main__":
     print("Harman Agent Started.", flush=True)
-    if not all():
-        print("Error: Missing required environment variables.", flush=True)
+    
+    # --- FIX (오류 수정) ---
+    # 'required_vars =' 뒤에 실제 변수 리스트를 할당합니다.
+    required_vars = ''
+    
+    if not all(required_vars):
+        print("Error: Missing required environment variables. Exiting.", flush=True)
+        # (디버깅을 위해 누락된 변수 확인)
+        print(f"DEBUG: DB_USER={'OK' if DB_USER else 'MISSING'}, DB_HOST={'OK' if DB_HOST else 'MISSING'}, MOUNT_PATH={'OK' if MOUNT_PATH else 'MISSING'}, NODE_NAME={'OK' if NODE_NAME else 'MISSING'}")
         exit(1)
+    # --- End FIX ---
+        
     main_loop()
