@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: DaemonSet 
+metadata:
+  name: harman-agent
+  namespace: database 
+spec:
+  selector:
+    matchLabels:
+      app: harman-agent
+  template:
+    metadata:
+      labels:
+        app: harman-agent
+    spec:
+      containers:
+      - name: harman-agent
+        image: harman-agent:0.1
+        imagePullPolicy: IfNotPresent 
+        env:
+          - name: SCAN_INTERVAL
+            value: "60"
+          - name: MOUNT_PATH 
+            value: "/mnt/node-data" 
+          - name: MY_NODE_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName 
+        envFrom:
+        - secretRef:
+            name: db-credentials
+        volumeMounts:
+        - name: host-data-dir
+          mountPath: /mnt/node-data 
+          readOnly: true
+      volumes:
+      - name: host-data-dir
+        hostPath:
+          path: /mnt/harman  
+          type: Directory
